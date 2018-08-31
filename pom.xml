@@ -32,7 +32,7 @@
   </parent>
 
   <artifactId>license-maven-plugin</artifactId>
-  <version>1.16</version>
+  <version>1.16-jochrist-proxy-hack</version>
   <packaging>maven-plugin</packaging>
 
   <name>License Maven Plugin</name>
