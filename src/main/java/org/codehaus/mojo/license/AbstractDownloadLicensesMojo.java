@@ -266,6 +266,17 @@ public abstract class AbstractDownloadLicensesMojo
         return dependenciesTool.loadProjectDependencies( project, this, localRepository, remoteRepositories, null );
     }
 
+    protected java.util.Properties systemSettings;
+
+    protected void storeProxy()
+    {
+        systemSettings = System.getProperties();
+    }
+
+    protected void loadProxy()
+    {
+        System.setProperties(systemSettings);
+    }
     /**
      * {@inheritDoc}
      */
@@ -281,6 +292,7 @@ public abstract class AbstractDownloadLicensesMojo
 
         initDirectories();
 
+        storeProxy();
         initProxy();
 
         Map<String, ProjectLicenseInfo> configuredDepLicensesMap = new HashMap<String, ProjectLicenseInfo>();
@@ -335,6 +347,7 @@ public abstract class AbstractDownloadLicensesMojo
         {
             throw new MojoExecutionException( "Unable to write license summary file: " + licensesOutputFile, e );
         }
+        loadProxy();
     }
 
     private List<ProjectLicenseInfo> sortByGroupIdAndArtifactId(List<ProjectLicenseInfo> depProjectLicenses) {
