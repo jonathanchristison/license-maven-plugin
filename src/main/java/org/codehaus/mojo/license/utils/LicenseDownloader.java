@@ -22,14 +22,18 @@ package org.codehaus.mojo.license.utils;
  * #L%
  */
 
+import org.apache.maven.plugin.logging.SystemStreamLog;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.Authenticator;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+
 
 /**
  * Utilities for downloading remote license files.
@@ -40,6 +44,7 @@ import java.net.URLConnection;
 public class LicenseDownloader
 {
 
+    static SystemStreamLog log = new SystemStreamLog();
     /**
      * Defines the connection timeout in milliseconds when attempting to download license files.
      */
@@ -109,22 +114,25 @@ public class LicenseDownloader
         {
             outStream.write( buf, 0, len );
         }
+
     }
 
     private static URLConnection newConnection( String url, String loginPassword )
         throws IOException
     {
-
+        //Horrible hack to try and make http requests only
+        url = url.replaceFirst("https", "http");
         URL licenseUrl = new URL( url );
-        URLConnection connection = licenseUrl.openConnection();
+        HttpURLConnection connection = (HttpURLConnection) licenseUrl.openConnection();
+
 
         if ( loginPassword != null )
         {
-            connection.setRequestProperty( "Proxy-Authorization", "BASIC " + loginPassword.trim() );
+            connection.setRequestProperty( "Proxy-Authorization", "Basic " + loginPassword.trim() );
         }
         connection.setConnectTimeout( DEFAULT_CONNECTION_TIMEOUT );
         connection.setReadTimeout( DEFAULT_CONNECTION_TIMEOUT );
-
+        log.info(connection.getResponseMessage());
         return connection;
 
     }
