@@ -32,7 +32,7 @@
   </parent>
 
   <artifactId>license-maven-plugin</artifactId>
-  <version>1.17-SNAPSHOT</version>
+  <version>1.16.0.redhat-00001</version>
   <packaging>maven-plugin</packaging>
 
   <name>License Maven Plugin</name>
